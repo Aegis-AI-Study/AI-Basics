@@ -41,4 +41,5 @@ for xi wi in data:
 
 ## Tensorflow 문법
 tf의 문법은 코드를 통해 확인해 보자.
-1. 변수 선언 : variables 폴더
+1. 변수 선언 : variables
+2. 세션 저장하기 : saver
