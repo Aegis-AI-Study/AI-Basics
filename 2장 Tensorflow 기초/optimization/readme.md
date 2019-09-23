@@ -24,6 +24,6 @@ NN은 기본적으로 다층 퍼셉트론 모델(MLP: Multi Layer Perceptron)을
 위의 cost함수를 보자. 빨간 점은 오른쪽으로, 파란점은 왼쪽으로 굴러 떨어질 것이다. 인간은 직관적으로 어느 지점에서 cost가 최소가 되는지를 알 수 있지만 기계가 알아들을 수 있도록 하려면 어떡해야 하는가를 생각해 보자. 
 우선 w축의 임의의 점에서 w값과 그 지점에서의 기울기만큼 움직여 보자. 빨간 지점같이 기울기가 음수라면 w가 커져야 하고, 파란 지점같이 기울기가 양수라면 w가 작아져야할 것이다. 이를 하나의 식으로 정리하면,
 
-![GD](https://latex.codecogs.com/gif.latex?w_{new}=w-\frac{d}{dw}cost(w))
+![GD](https://latex.codecogs.com/gif.latex?w_%7Bnew%7D%3Dw-%5Cfrac%7Bd%7D%7Bdw%7Dcost%28w%29)
 
 와 같이 될것이다. 이때 감마 값을 학습률(learning rate)이라 하며 이 학습률을 조정하는 것으로 최적화에 걸리는 시간을 조절할 수 있다.
