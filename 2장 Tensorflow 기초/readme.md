@@ -43,3 +43,4 @@ for xi wi in data:
 tf의 문법은 코드를 통해 확인해 보자.
 1. 변수 선언 : variables
 2. 세션 저장하기 : saver
+3. 모델의 최적화 : optimization
