@@ -27,3 +27,8 @@ NN은 기본적으로 다층 퍼셉트론 모델(MLP: Multi Layer Perceptron)을
 ![equation](https://latex.codecogs.com/gif.latex?%5Clarge%20w_%7Bnew%7D%3Dw-%5Cfrac%7B%5Cmathrm%7Bd%7D%20%7D%7B%5Cmathrm%7Bd%7D%20w%7Dcost%28w%29)
 
 와 같이 될것이다. 이때 감마 값을 학습률(learning rate)이라 하며 이 학습률을 조정하는 것으로 최적화에 걸리는 시간을 조절할 수 있다.
+
+## Stochastic Gradient Descent
+GD는 모든 데이터를 가지고 오차를 줄이는 최적화 기법이다. 그러나 모든 데이터를 이용하는 것은 계산량과 메모리 공간에서 큰 부담이 될 수 밖에 없다. 확률적 경사강하법(SGD)은 이런 부담을 줄이기 위해 탄생한 기법이다. 
+
+SGD는 우리가 가진 데이터 전체를 이용하는 것이 아니라 데이터의 일부를 무작위로 선정하여 GD를 실행하는 방법이다. SGD는 GD에 비해 수렴하는 속도는 매우 빠르지만, 학습률에 의해 성능이 크게 좌우되며 무작위 선정한 데이터가 겹쳐서 생기는 노이즈가 발생할 수 도 있다는 단점을 갖고 있다.
