@@ -24,7 +24,7 @@ b = tf.Variable(tf.random_uniform([1]), name="bias")
 hypothesis = tf.sigmoid(tf.matmul(X, W) + b)
 
 # define cost(loss) function
-# cost : binary entropy loss
+# cost : binary cross entropy loss
 cost = tf.reduce_mean(Y * tf.log(hypothesis) + (1-Y)*tf.log(1-hypothesis))
 
 # define optimizer
@@ -45,4 +45,4 @@ with tf.Session() as sess:
             print(step, sess.run(cost, feed_dict={X: x_data, Y: y_data}), sess.run(W))
 
     h, c, a = sess.run([hypothesis, predicted, accuracy], feed_dict={X: x_data, Y: y_data})
-    print("\nhypothesis: ", h, "\nCorrect: ", c, "\nAccuracy: ", a)
+    print("\nhypothesis: ", h, "\nPredicted: ", c, "\nAccuracy: ", a)
