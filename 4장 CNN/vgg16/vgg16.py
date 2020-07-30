@@ -20,6 +20,7 @@ class VGG16():
             image_batch = self.input_image_vector[i:i+self.batch_size]
             yield image_batch
 
+    # convolutions layer
     def Convnet(input_tensor, input_channels, output_channels,
                 name="Conv", stddev=0.1, padding="SAME", activation="relu",
                 kernel_shape=(3,3), pool_shape=(2,2),
@@ -56,6 +57,7 @@ class VGG16():
 
         return Conv1
 
+    # fully connected layer
     def FCnet():
         pass
 
