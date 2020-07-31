@@ -62,12 +62,193 @@ class VGG16():
 
     @classmethod
     def train(self, num_classes):
+
+        conv_strides = (1,1,1,1)
+        pooling_strides = (1,2,2,1)
+        padding = "SAME"
         
         X_raw = tf.placeholder(dtype=tf.float32, shape=(224,224,3), name="X_raw")
         X = tf.reshape(X_raw, (-1, 224, 224, 3), name="X")
         Y = tf.placeholder(dtype=tf.float32, shape=(None, num_classes), name="Y")
 
-        conv1 = Convnet(X, input_channels=3, output_channels=64, name="conv1_1")
+        # block 1
+        # input: 224, 224, 3
+        # output: 112, 112, 64
+        kernel1_1 = tf.get_variable(name="kernel1_1", shape=(3,3,3,64),
+                initializer=tf.random_normal_initializer(stddev=0.1))
+        conv1_1 = tf.nn.conv2d(X, kernel1, strides=conv_strides,
+                        padding=padding, name="conv1_1")
+        conv1_1 = tf.nn.relu(conv1_1)
+
+        kernel1_2 = tf.get_variable(name="kernel1_2", shape=(3,3,64,64),
+                initializer=tf.random_normal_initializer(stddev=0.1))
+        conv1_2 = tf.nn.conv2d(conv1_1, kernel1_2, strides=conv_strides,
+                        padding=padding, name="conv1_2")
+        conv1_2 = tf.nn.relu(conv1_2)
+
+        pool1 = tf.nn.max_pool(conv1_2, ksize=pooling_strides, strides=pooling_strides,
+        padding=padding, name="pool1")
+
+        # block 2
+        # input: 112, 112, 64
+        # output: 56, 56, 128
+        kernel2_1 = tf.get_variable(
+            name="kernel2_1", shape=(3,3,64,128),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv2_1 = tf.nn.conv2d(
+            pool1, kernel2_1,
+            strides=conv_strides, padding=padding, name="conv2_1"
+        )
+        conv2_1 = tf.nn.relu(conv2_1)
+        
+        kernel2_2 = tf.get_variable(
+            name="kernel2_2", shape=(3,3,64,128),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv2_2 = tf.nn.conv2d(
+            conv2_1, kernel2_2,
+            strides=conv_strides, padding=padding, name="conv2_2"
+        )
+        conv2_2 = tf.nn.relu(conv2_2)
+
+        pool2 = tf.nn.max_pool(
+            conv2_2, ksize=pooling_strides, strides=pooling_strides,
+            padding=padding, name="pool2"
+        )
+
+        # block 3
+        # input: 56, 56, 128
+        # output: 28, 28, 256
+        kernel3_1 = tf.get_variable(
+            name="kernel3_1", shape=(3,3,128,256),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv3_1 = tf.nn.conv2d(
+            pool2, kernel3_1,
+            strides=conv_strides, padding=padding, name="conv3_1"
+        )
+        conv3_1 = tf.nn.relu(conv3_1)
+
+        kernel3_2 = tf.get_variable(
+            name="kernel3_2", shape=(3,3,128,256),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv3_2 = tf.nn.conv2d(
+            conv3_1, kernel3_2,
+            strides=conv_strides, padding=padding, name="conv3_2"
+        )
+        conv3_2 = tf.nn.relu(conv3_2)
+
+        pool3 = tf.nn.max_pool(
+            conv3_2, ksize=pooling_strides, strides=pooling_strides,
+            padding=padding, name="pool3"
+        )
+
+        # block 4
+        # input: 28, 28, 256
+        # output: 14, 14, 512
+        kernel4_1 = tf.get_variable(
+            name="kernel4_1", shape=(3,3,256,512),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv4_1 = tf.nn.conv2d(
+            pool3, kernel4_1,
+            strides=conv_strides, padding=padding, name="conv4_1"
+        )
+        conv4_1 = tf.nn.relu(conv4_1)
+
+        kernel4_2 = tf.get_variable(
+            name="kernel4_2", shape=(3,3,256,512),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv4_2 = tf.nn.conv2d(
+            conv4_1, kernel4_2,
+            strides=conv_strides, padding=padding, name="conv4_2"
+        )
+        conv4_2 = tf.nn.relu(conv4_2)
+
+        pool4 = tf.nn.max_pool(
+            conv4_2, ksize=pooling_strides, strides=pooling_strides,
+            padding=padding, name="pool4"
+        )
+
+        # block 5
+        # input: 14, 14, 512
+        # output: 7, 7, 512
+        kernel5_1 = tf.get_variable(
+            name="kernel5_1", shape=(3,3,512,512),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv5_1 = tf.nn.conv2d(
+            pool4, kernel5_1,
+            strides=conv_strides, padding=padding, name="conv5_1"
+        )
+        conv5_1 = tf.nn.relu(conv5_1)
+
+        kernel5_2 = tf.get_variable(
+            name="kernel5_2", shape=(3,3,512,512),
+            initializer=tf.random_normal_initializer(stddev=0.1)
+        )
+        conv5_2 = tf.nn.conv2d(
+            conv5_1, kernel5_2,
+            strides=conv_strides, padding=padding, name="conv5_2"
+        )
+        conv5_2 = tf.nn.relu(conv5_2)
+
+        pool5 = tf.nn.max_pool(
+            conv5_2, ksize=pooling_strides, strides=pooling_strides,
+            padding=padding, name="pool5"
+        )
+
+        # flatten
+        # input: 7, 7, 512
+        # output: ?, 25088
+        flatten = tf.reshape(pool5, [-1])
+
+        # fc1 layer
+        # input: ?, 25088
+        # otput: ?, 4096
+        W1 = tf.get_variable(
+            name="W1", shape=(25088, 4096),
+            initializer=tf.contrib.layers.xavier_initializer()
+        )
+        b1 = tf.get_variable(
+            name="b1", shape=(4096),
+            initializer=tf.contrib.layers.xavier_initializer()
+        )
+        fc1 = tf.matmul(flatten, W1) + b1
+
+        # fc2 layer
+        # input: ?, 4096,
+        # output: ?, 4096
+        W2 = tf.get_variable(
+            name="W2", shape=(4096, 4096),
+            initializer=tf.contrib.layers.xavier_initializer()
+        )
+        b2 = tf.get_variable(
+            name="b2", shape=(4096),
+            initializer=tf.contrib.layers.xavier_initializer()
+        )
+        fc2 = tf.matmul(fc1, W2) + b2
+
+        # prediction layer
+        # input: ?, 4096
+        # output: ?, num_classes
+        W3 = tf.get_variable(
+            name="W3", shape=(4096, num_classes),
+            initializer=tf.contrib.layers.xavier_initializer()
+        )
+        b3 = tf.get_variable(
+            name="b3", shape=(num_classes),
+            initializer=tf.contrib.layers.xavier_initializer()
+        )
+
+        hypothesis = tf.matmul(fc2, W3) + b3
+        loss = tf.reduce_mean(
+            tf.nn.softmax_cross_entropy_with_logits(logits=hypothesis, labels=Y)
+        )
+        optimizer = tf.train.AdamOptimizer(learning_rate=0.01).minimize(loss)
 
         with graph.as_default():
             with tf.Session() as sess:
