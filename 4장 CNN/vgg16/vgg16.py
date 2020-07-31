@@ -20,6 +20,7 @@ class VGG16():
             image_batch = self.input_image_vector[i:i+self.batch_size]
             yield image_batch
 
+    @classmethod
     # convolutions layer
     def Convnet(input_tensor, input_channels, output_channels,
                 name="Conv", stddev=0.1, padding="SAME", activation="relu",
@@ -41,24 +42,11 @@ class VGG16():
             padding=padding,
             name=name
         )
-
-        # activation
-        Conv1 = tf.nn.relu(
-            features=Conv1
-        )
-
-        # max pooling
-        Conv1 = tf.nn.max_pool(
-            value=Conv1,
-            ksize=(1, *pool_shape, 1),
-            strides=pool_stride,
-            padding=padding
-        )
-
         return Conv1
 
+    @classmethod
     # fully connected layer
-    def FCnet():
+    def FCnet(input_tensor, output_channels):
         pass
 
     @classmethod
