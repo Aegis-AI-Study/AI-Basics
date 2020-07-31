@@ -57,7 +57,8 @@ class VGG16():
     def batch_generator(self):
         for i in range(0, self.total_batch, self.batch_size):
             image_batch = self.input_image_vector[i:i+self.batch_size]
-            yield image_batch
+            class_label_batch = self.class_labels[i:i+self.batch_size]
+            yield image_batch, class_label_batch
 
     @classmethod
     def train(self, num_classes):
@@ -72,8 +73,8 @@ class VGG16():
             with tf.Session() as sess:
                 sess.run(tf.global_variables_initializer())
 
-                for batch in self.batch_generator():
-                    pass
+                for image_batch, class_label_batch in self.batch_generator():
+                    feed_dict={X_raw: image_batch, Y:class_label_batch}
 
 def gen(numList):
     for i in range(0, len(numList), 10):
