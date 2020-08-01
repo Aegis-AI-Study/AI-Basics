@@ -254,8 +254,17 @@ class VGG16():
             with tf.Session() as sess:
                 sess.run(tf.global_variables_initializer())
 
-                for image_batch, class_label_batch in self.batch_generator():
-                    feed_dict={X_raw: image_batch, Y:class_label_batch}
+                avg_loss = 0
+
+                for epoch in range(self.epochs):
+                    for image_batch, class_label_batch in self.batch_generator():
+                        feed_dict={X_raw: image_batch, Y:class_label_batch}
+                        l, _, = sess.run([loss, optimizer], feed_dict=feed_dict)
+                        avg_loss = l/self.total_batch
+                    print("Epoch: {}, loss: {}".format(epoch+1, avg_loss))
+                
+                saver = tf.train.Saver()
+                saver.save(sess, "model/model.ckpt")
 
 def gen(numList):
     for i in range(0, len(numList), 10):
